@@ -14,7 +14,7 @@ export const IMG_PRESETS = {
 export type ImgPreset = keyof typeof IMG_PRESETS;
 
 export const MAX_IMAGES_PER_POST = 9;
-export const MAX_PROJECT_SUMMARY_LENGTH = 500;
+export const MAX_PROJECT_SUMMARY_LENGTH = 200;
 export const PROJECT_MEDIA_MARKER = '__M1_PROJECT_MEDIA__';
 
 // Client-side compression target.
