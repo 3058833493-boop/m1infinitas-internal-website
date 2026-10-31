@@ -8,7 +8,7 @@ const bundle = await build({
   },
   bundle: true, write: false, platform: 'node', format: 'esm',
 });
-const { toggleMemberCategory: toggle, removeMemberCategory: remove, matchesMemberCategories: matches, buildMembersDirectory } = await import(
+const { toggleMemberCategory: toggle, removeMemberCategory: remove, matchesMemberCategories: matches, matchesMemberQuery, buildMembersDirectory } = await import(
   `data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString('base64')}`
 );
 
@@ -65,6 +65,13 @@ assert.deepEqual(namesFor(['violin', 'yangqin']), []);
 assert.deepEqual(namesFor(['music', 'visual', 'digital']), ['张天澍 Tredd', '牟兰']);
 assert.deepEqual(namesFor(['music', 'visual', 'digital', 'research']), []);
 assert.deepEqual(namesFor(['dj', 'recording', 'film-music', 'synthesizer-performance']), ['张天澍 Tredd']);
+const namesForQuery = (ids, query) => members
+  .filter((entry) => matches(entry, ids) && matchesMemberQuery(entry, query))
+  .map(({ profile }) => profile.name);
+assert.deepEqual(namesForQuery(['music', 'visual', 'digital'], 'Tredd'), ['张天澍 Tredd']);
+assert.deepEqual(namesForQuery(['music', 'visual', 'digital'], 'Raven'), []);
+assert.deepEqual(namesForQuery(['all'], 'violin'), ['陶鑫然 Raven']);
+assert.deepEqual(namesForQuery(['all'], '小提琴'), ['陶鑫然 Raven']);
 
 console.log(JSON.stringify({
   memberCategories: 'passed', parentFallback: true, multiSelectPreserved: true, rootDeselection: true,
