@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/hooks/useAuth';
 import { useFavoriteMembers } from '@/hooks/useFavoriteMembers';
 import { useMembersDirectory } from '@/hooks/useMembersDirectory';
-import { matchesMemberQuery, sortMembers } from '@/lib/memberDirectory';
+import { searchMembers, sortMembers } from '@/lib/memberDirectory';
 import { ALL_MEMBERS_CATEGORY_ID, getMemberCategory, matchesMemberCategories, removeMemberCategory } from '@/lib/memberCategories';
 import { translateMemberLabel } from '@/i18n/memberLabels';
 import { cn } from '@/lib/utils';
@@ -70,7 +70,7 @@ export function MembersPage() {
       : orderedMembers.filter((member) => matchesMemberCategories(member, selectedCategoryIds));
   }, [orderedMembers, selectedCategoryIds]);
   const visibleMembers = useMemo(() => {
-    return hasCriteria ? categoryMembers.filter((member) => matchesMemberQuery(member, query)) : [];
+    return hasCriteria ? searchMembers(categoryMembers, query) : [];
   }, [categoryMembers, hasCriteria, query]);
 
   const showAllMembers = () => {
